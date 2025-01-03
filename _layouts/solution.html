@@ -2,70 +2,44 @@
 layout: default
 ---
 
-<h2> Search by Tag </h2>
+<h4>{{ page.category }} {{ page.contest_name }} - {{ page.contest_code }}</h4>
+<h1 class="d-flex w-100 justify-content-between"><span>{{ page.problem_name }}</span> <small>[{{ page.problem_code }}]</small></h1>
 
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
-        <span class="input-group-text">
-            <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
+<div class="container">
+  <div id="accordion" class="accordion">
+    <div class="card mb-0">
+      <div class="card-header collapsed" data-toggle="collapse" href="#codechef-problem">
+        <h3 class="card-title"> Problem Statement </h3>
+      </div>
+      <div id="codechef-problem" class="card-body collapse p-0" data-parent="#accordion" data-toggle="collapse"
+        href="#codechef-problem">
+        <div id="codechef-problem-container" class="p-4" markdown="1">
+          {% capture problem_statement %}
+          {% include_relative _problems/{{ page.problem_code | upcase }}.md %}
+          {% endcapture %}
+          {{ problem_statement | markdownify }}
+        </div>
+      </div>
     </div>
-    <input id="search" type="text" class="form-control" placeholder="Enter tag" aria-label="Enter tag">
+  </div>
 </div>
 
-<script>
-    function search(searchTerm) {
-        $('.search-list').each((n, e) => {
-            $(e).removeClass('collapse');
-            $(e).addClass('collapse');
-        });
-        var regex = RegExp(searchTerm);
-        $('.search-list')
-            .filter(function () {
-                var tags = $(this).data('tags');
-                if (tags !== '' && $('#search').val() !== '')
-                    return regex.test(tags);
-                else return false;
-            })
-            .each((n, e) => {
-                $(e).removeClass('collapse');
-            });
-        setSizes();
-    }
-    $('#search').on('keyup', () => {
-        search($('#search').val().toLowerCase());
-    });
-    $(window).on('load', function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        $('#search').val(urlParams.get('q'));
-        search($('#search').val().toLowerCase());
-    });
-</script>
+<br>
 
-<div class="list-group">
-    {% for post in site.writeups %}
-    <a href="{{ post.url | relative_url }}" data-tags="{{ post.tags | join: '' | downcase }}"
-        class="search-list list-group-item list-group-item-action flex-column align-items-start collapse">
-        <div class="d-flex w-100 justify-content-between">
-            <h6 class="mb-1">{{ post.category }}</h6>
-            <small class="text-muted">{{ post.date | date: '%d %B %Y' }}</small>
-        </div>
-        <h2 class="mb-1">{{ post.title }}</h2>
-        <p class="mb-0">{{ post.content | strip_html | truncatewords: 20 }}</p>
-        <small class="text-muted">{{ post.tags | join: ', ' }}</small>
-    </a>
-    {% endfor %}
+{{ content }}
 
-    {% for post in site.solutions %}
-    <a href="{{ post.url | relative_url }}" data-tags="{{ post.tags | join: '' | downcase }}"
-        class="search-list list-group-item list-group-item-action flex-column align-items-start collapse">
-        <div class="d-flex w-100 justify-content-between">
-            <h6 class="mb-1">{{ post.contest_name }}</h6>
-            <small class="text-muted">{{ post.date | date: '%d %B %Y' }}</small>
-        </div>
-        <h2 class="mb-1">{{ post.title }}</h2>
-        <p class="mb-0">{{ post.excerpt }}</p>
-        <small class="text-muted">{{ post.tags | join: ', ' }}</small>
-    </a>
-    {% endfor %}
-</div>
+<span id="divider-line">____</span>
+<br><br>
+<small>{{ page.date | date: "%-d %B %Y" }}</small>
+{% include tags.html %}
+<br>
+Share this solution:&nbsp;
+<a
+  href="javascript:window.open('https://www.facebook.com/sharer.php?u={{ page.url | absolute_url }}','Windows','width=650,height=350,toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no')"><i
+    class="fa fa-facebook-official" aria-hidden="true"></i></a>&nbsp;
+<a
+  href="javascript:window.open('https://twitter.com/intent/tweet?url={{ page.url | absolute_url }}&text=Solution+for+{{ page.problem_name }}+from+{{ page.contest_name }}+of+{{ page.category }}&hashtags=competitiveprogramming,programming,datastructures,algorithms,{{ page.contest_name }},{{ page.category }}','Windows','width=600,height=500,toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no')"><i
+    class="fa fa-twitter" aria-hidden="true"></i></a>&nbsp;
+<a
+  href="javascript:window.open('https://www.linkedin.com/sharing/share-offsite/?url={{ page.url | absolute_url }}&text=Solution+for+{{ page.problem_name }}+from+{{ page.contest_name }}+of+{{ page.category }}','Windows','width=650,height=350,toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no')"><i
+    class="fa fa-linkedin" aria-hidden="true"></i></a>
