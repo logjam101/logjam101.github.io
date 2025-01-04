@@ -7,7 +7,7 @@ title: Welcome to the Hacker's Cookbook
 
 Welcome to my personal **Hacker's Cookbook** — a collection of pentesting experiences, insights, and practical knowledge. This site is where I document everything I’ve learned from hands-on labs (especially **Hack The Box**) and my professional work in cybersecurity, as well as valuable concepts and techniques gained during my university studies.  
 
-You can learn more about me on the [About](/About) page.
+You can learn more about me on the [[About]] page.
 
 ---
 
