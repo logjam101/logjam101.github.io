@@ -28,31 +28,30 @@ const config: QuartzConfig = {
         body: "Source Sans Pro",
         code: "IBM Plex Mono",
       },
-      colors: {
-  lightMode: {
-    light: "#282a36",          # Dracula background color
-    lightgray: "#44475a",      # Border color (slightly lighter than background)
-    gray: "#6272a4",           # Graph links, heavier borders
-    darkgray: "#f8f8f2",       # Body text (off-white)
-    dark: "#ffffff",           # Header text and icons (pure white for contrast)
-    secondary: "#8be9fd",      # Link color, current graph node (cyan)
-    tertiary: "#50fa7b",       # Hover states and visited graph nodes (green)
-    highlight: "rgba(255, 121, 198, 0.15)",  # Internal link background, highlighted text (pink with transparency)
-    textHighlight: "#ff79c688",  # Markdown highlighted text background (light magenta)
-  },
-  darkMode: {
-    light: "#282a36",          # Same as Dracula background
-    lightgray: "#44475a",      # Darker gray for borders
-    gray: "#6272a4",           # Graph links, heavier borders
-    darkgray: "#f8f8f2",       # Body text (light text on dark)
-    dark: "#ffffff",           # Header text and icons
-    secondary: "#8be9fd",      # Cyan for links and active nodes
-    tertiary: "#50fa7b",       # Green for hover and visited nodes
-    highlight: "rgba(255, 121, 198, 0.15)",  # Highlighted lines of code
-    textHighlight: "#ffb86c88",  # Orange for markdown text highlight
-  },
-
-    },
+    colors: {
+      lightMode: {
+        light: "#282a36",
+        lightgray: "#44475a",
+        gray: "#6272a4",
+        darkgray: "#f8f8f2",
+        dark: "#ffffff",
+        secondary: "#8be9fd",
+        tertiary: "#50fa7b",
+        highlight: "rgba(255, 121, 198, 0.15)",
+        textHighlight: "#ff79c688",
+      },
+      darkMode: {
+        light: "#282a36",
+        lightgray: "#44475a",
+        gray: "#6272a4",
+        darkgray: "#f8f8f2",
+        dark: "#ffffff",
+        secondary: "#8be9fd",
+        tertiary: "#50fa7b",
+        highlight: "rgba(255, 121, 198, 0.15)",
+        textHighlight: "#ffb86c88",
+      },
+}  
   },
   plugins: {
     transformers: [
