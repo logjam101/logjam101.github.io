@@ -29,30 +29,29 @@ const config: QuartzConfig = {
         code: "IBM Plex Mono",
       },
       colors: {
-        lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          //secondary: "#284b63",
-          secondary: "#FF79C6",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
-        },
-        darkMode: {
-          light: "#161618",
-          lightgray: "#393639",
-          gray: "#646464",
-          darkgray: "#d4d4d4",
-          dark: "#ebebec",
-          secondary: "#7b97aa",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#b3aa0288",
-        },
-      },
+  lightMode: {
+    light: "#282a36",          # Dracula background color
+    lightgray: "#44475a",      # Border color (slightly lighter than background)
+    gray: "#6272a4",           # Graph links, heavier borders
+    darkgray: "#f8f8f2",       # Body text (off-white)
+    dark: "#ffffff",           # Header text and icons (pure white for contrast)
+    secondary: "#8be9fd",      # Link color, current graph node (cyan)
+    tertiary: "#50fa7b",       # Hover states and visited graph nodes (green)
+    highlight: "rgba(255, 121, 198, 0.15)",  # Internal link background, highlighted text (pink with transparency)
+    textHighlight: "#ff79c688",  # Markdown highlighted text background (light magenta)
+  },
+  darkMode: {
+    light: "#282a36",          # Same as Dracula background
+    lightgray: "#44475a",      # Darker gray for borders
+    gray: "#6272a4",           # Graph links, heavier borders
+    darkgray: "#f8f8f2",       # Body text (light text on dark)
+    dark: "#ffffff",           # Header text and icons
+    secondary: "#8be9fd",      # Cyan for links and active nodes
+    tertiary: "#50fa7b",       # Green for hover and visited nodes
+    highlight: "rgba(255, 121, 198, 0.15)",  # Highlighted lines of code
+    textHighlight: "#ffb86c88",  # Orange for markdown text highlight
+  },
+
     },
   },
   plugins: {
