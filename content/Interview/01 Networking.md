@@ -245,19 +245,15 @@ Ethernet frames contain:
 - Source and destination MAC addresses
 - Length/type identifiers
 - Frame check sequences for error detection
+
 ![[Pasted image 20250106190342.png]]
-Switches, which have replaced hubs, use MAC tables to direct traffic. A switch dynamically learns MAC addresses by examining source data in frames.
+### MAC table
+Switches, which have replaced hubs, use MAC tables to direct traffic. A switch dynamically learns MAC addresses by examining source data in frames. A MAC address table stores mappings of each MAC address to the switch port it is connected to. When a switch receives a frame, it checks its MAC table to determine the correct port for forwarding the frame, ensuring efficient and accurate data delivery. If the destination MAC address is unknown, the switch broadcasts the frame to all ports except the one it was received on, awaiting a reply to update its table. Switches also eliminate collisions through full-duplex communication, allowing simultaneous data transmission and reception on a single link. Advanced switches may support VLANs and other features to segment networks and enhance security.
 
 ![[Pasted image 20250106191132.png]]
-## The Access Layer
-The access layer is the part of the network in which people gain access to other hosts and to shared files and printers. The access layer provides the first line of networking devices that connect hosts to the wired Ethernet network. Within an Ethernet network, each host can connect directly to an access layer networking device using an Ethernet cable. Ethernet hubs contain multiple ports that are used to connect hosts to the network. Only one message can be sent through an Ethernet hub at a time. Two or more messages sent at the same time will cause a collision. Because excessive retransmissions can clog up the network and slow down network traffic, hubs are now considered obsolete and have been replaced by Ethernet switches.
-
-An Ethernet switch is a device that is used at Layer 2. When a host sends a message to another host connected to the same switched network, the switch accepts and decodes the frames to read the MAC address portion of the message. A table on the switch, called a MAC address table, contains a list of all the active ports and the host MAC addresses that are attached to them. When a message is sent between hosts, the switch checks to see if the destination MAC address is in the table. If it is, the switch builds a temporary connection, called a circuit, between the source and destination ports. Ethernet switches also allow for sending and receiving frames over the same Ethernet cable simultaneously. This improves the performance of the network by eliminating collisions.
-
-A switch builds the MAC address table by examining the source MAC address of each frame that is sent between hosts. When a new host sends a message or responds to a flooded message, the switch immediately learns its MAC address and the port to which it is connected. The table is dynamically updated each time a new source MAC address is read by the switch.
-
 
 ## Sanity Check 2
+
 **Question 1**
 > [!question]- Match the protocol function to the description while taking into consideration that a network client is visiting a web site: 1. application protocol, 2. transport protocol, 3. internet protocol, 4. network access protocol
 > 1. Governing the way a web server and a web client interact
@@ -270,7 +266,7 @@ A switch builds the MAC address table by examining the source MAC address of eac
 > [!question]- Which three layers of the OSI model map to the application layer of the TCP/IP model?  
 > Application, Presentation, Session
 
-**Question 3
+**Question 3**
 > [!question]- Which two OSI model layers have the same functionality as two layers of the TCP/IP model?
 > Transport, Network
 
