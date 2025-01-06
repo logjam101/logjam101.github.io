@@ -3,7 +3,7 @@ layout: default
 title: Interview Preparation
 ---
 
-# Interview Preparation
+# 00 About this section
 
 Welcome to the **Interview Preparation** section — a collection of quick-reference modules designed to help you refresh foundational cybersecurity concepts. This content is intended to provide a concise review of core topics frequently covered in technical interviews for cybersecurity roles, including **Networking**, **Active Directory**, **Linux Command Line**, **PowerShell**, and more.
 
