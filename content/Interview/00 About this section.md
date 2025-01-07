@@ -19,7 +19,8 @@ If you're preparing for a cybersecurity interview, a structured review of key to
     
 2. **Common Ports and Protocols** [[02 Ports & Protocols]] 
     After refreshing your networking knowledge, head over to the section that covers the **most common ports and protocols**. This topic is frequently tested in interviews, as understanding which ports are associated with which services (HTTP, FTP, DNS, etc.) is crucial for both blue and red team roles.
-    
+3. **Active Directory Basics** [[00 Active Directory Basics]]
+	The next important topic to dive into is **Active Directory (AD)**. AD is a directory service used by Microsoft to manage permissions and access to network resources. Understanding its role in cybersecurity is essential, as many attacks focus on compromising AD to escalate privileges or gain access to sensitive data
 
 These two areas are vital stepping stones to mastering the more advanced topics you'll encounter in your interview prep.
 
