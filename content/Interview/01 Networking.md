@@ -310,5 +310,175 @@ Switches, which have replaced hubs, use MAC tables to direct traffic. A switch d
 > [!question]- How much data can be encapsulated into a normal sized Ethernet frame before it is sent over the network?
 > 46 to 1500 bytes
 
+## IPv4
+IPv4 addressing is a system that assigns unique, logical network addresses to devices for communication within a LAN or across the internet. Each IPv4 address is tied to a network interface, typically via a Network Interface Card (NIC). Packets traveling over networks contain source and destination IPv4 addresses, guiding routers and switches in delivering the data correctly.
 
+### IPv4 Structure
+An IPv4 address is 32 bits, split into a network and host portion. For example, in 192.168.5.11/24, the first three octets (192.168.5) represent the network, while the last octet (11) identifies the host.
 
+### Unicast, Broadcast, and Multicast
+- **Unicast**: One-to-one communication where data is sent from one source to a single destination.
+- **Broadcast**: One-to-all communication using a destination IP with all bits set to 1 (e.g., 255.255.255.255). Broadcasts are processed by all devices within the same broadcast domain.
+- **Multicast**: One-to-many communication to a selected group of hosts using reserved addresses (224.0.0.0 to 239.255.255.255). Protocols like OSPF use multicast for efficient routing updates.
+### Private vs. Public IPv4 Addresses
+Private IPv4 ranges:
+- 10.0.0.0/8
+- 172.16.0.0/12
+- 192.168.0.0/16
+
+Network Address Translation (NAT) allows devices with private addresses to communicate on the internet by mapping them to a public address at the router.
+
+### Special IPv4 Addresses
+- **Loopback (127.0.0.1)**: Tests a device’s own network stack.
+- **Link-Local (169.254.x.x)**: Self-assigned when DHCP fails.
+
+### Segmentation and Subnetting
+Subnetting divides a large network into smaller segments, reducing broadcast traffic and enhancing security. This involves reallocating host bits to create subnets.
+
+## IPv6
+IPv6 addresses are 128-bit and written in hexadecimal. Notable features include:
+- **Zero Compression**: Replace contiguous 0s with "::" (once per address).
+- **Leading Zero Omission**: Skip leading zeros in hextets (e.g., 01ab becomes 1ab).
+
+Example: `2001:db8::1` simplifies `2001:0db8:0000:0000:0000:0000:0000:0001`.
+
+### Addressing Methods
+- **Static**: Manual configuration of IP settings.
+- **Dynamic (DHCP)**: Automated assignment from a DHCP server.
+
+## DHCP Process
+A DHCP server assigns addresses through these steps:
+1. **Discover**: Broadcasts request for IP configuration.
+2. **Offer**: DHCP server suggests an address.
+3. **Request**: Client accepts the offered address.
+4. **Acknowledgment**: Server confirms the assignment.
+
+## Gateways
+A default gateway connects local networks to external networks. It’s typically provided by a router with both DHCP client (for ISP connection) and DHCP server (for internal network) functions.
+
+## MAC and IP
+Networking uses:
+- **MAC Address**: Physical hardware identifier.
+- **IP Address**: Logical identifier for routing.
+
+ARP resolves IP addresses to MAC addresses within local networks, storing them in an ARP table. IPv6 uses Neighbor Discovery for similar functionality.
+
+## Broadcast Domains and ARP
+Broadcast domains encompass devices that receive network-wide broadcast traffic. ARP works by:
+1. Broadcasting a query for a MAC address.
+2. Receiving a reply with the MAC.
+3. Storing the result in the ARP table.
+
+Routers segment networks to manage broadcast traffic efficiently.
+### Network Splitting
+
+As networks grow, dividing an access layer network into multiple networks becomes essential. This division improves performance and management. Methods for network splitting include:
+
+- **Broadcast Containment**: Routers at the distribution layer limit broadcasts to local networks, preventing unnecessary traffic from spreading.
+- **Security Requirements**: Certain computers or data can be isolated for protection by using routers to create secure segments.
+- **Physical Locations**: Distributed routers link local networks across geographically separate sites within an organization.
+- **Logical Grouping**: Routers can group users by common needs, like organizing departments within a company.
+
+The distribution layer connects these networks and manages inter-network traffic while keeping local traffic contained within its network.
+
+### Routers and Forwarding
+
+- **Router Functionality**: Routers connect multiple Layer 3 IP networks, making forwarding decisions based on IP addresses.
+- **Forwarding Decisions**: Routers forward packets when source and destination IP networks differ.
+- **Encapsulation**: A router decodes incoming frames, retrieves the packet, and uses the destination IP to guide routing decisions.
+
+### Routing Tables
+
+Routing tables guide the forwarding of packets:
+
+- Each router interface connects to a unique local network.
+- **Routing Process**:
+  - The router extracts the destination IP from the frame.
+  - Matches the network portion of the destination IP to a routing table entry.
+  - Encapsulates the packet into a new frame for forwarding.
+- **MAC Address Resolution**: ARP tables provide MAC addresses for devices on the next hop.
+- **Default Gateway**: Hosts use a configured default gateway (router interface IP) to reach external networks.
+
+### Routing Table Entries
+
+- **Dynamic Updates**: Automatic entries from information exchanges with other routers.
+- **Manual Entries**: Configured by network administrators.
+
+### LAN Construction
+
+- **Single Local Network**:
+  - All hosts share one broadcast domain.
+  - Hosts use ARP to find each other.
+- **Multiple Networks**:
+  - Reduces network congestion.
+  - Requires routing for inter-network communication.
+  - Adds complexity and potential latency.
+
+### TCP and UDP
+
+- **UDP (User Datagram Protocol)**:
+  - Connectionless, does not confirm delivery.
+  - Ideal for real-time uses like streaming or VoIP.
+- **TCP (Transmission Control Protocol)**:
+  - Connection-oriented with sequence numbers.
+  - Retransmits lost data segments.
+  - Suitable for reliable communication.
+
+### Ports
+
+Ports help identify specific processes:
+
+- **Port Number Usage**:
+  - Identifies protocols and services.
+  - Tracks conversations with source and destination ports.
+- **Port Categories**:
+  - **Well-Known Ports**: 1–1023, assigned to standard services.
+  - **Registered Ports**: 1024–49151, available for proprietary services.
+  - **Private Ports**: 49152–65535, typically source ports.
+- **ICANN**: Manages port number assignments.
+
+### Servers and Applications
+
+- **Servers**: Provide information or services, e.g., web servers.
+- **Client Software**: Browsers like Chrome or Firefox access services.
+- **Client/Server Model**: Clients request, and servers respond. Common example: a web browser requesting a web page using HTTP.
+
+### URI Components
+
+- **URN (Uniform Resource Name)**: Identifies a namespace without location.
+- **URL (Uniform Resource Locator)**: Specifies a resource’s network location.
+
+### Common Internet Services and Protocols
+
+- **DNS (Domain Name System)**:
+  - Translates domain names to IP addresses.
+  - Queries other DNS servers if local records are absent.
+- **Web Servers**:
+  - Use HTTP on port 80 and HTTPS on port 443.
+  - HTTP is non-secure; HTTPS encrypts traffic.
+  - HTML defines web page structure.
+- **FTP (File Transfer Protocol)**:
+  - Uses port 21 for control, port 20 for data.
+  - Supports file upload, download, and management.
+- **Remote Access**:
+  - **Telnet**: Uses port 23 but transmits data in plaintext.
+  - **SSH**: Provides encrypted, secure remote access.
+For additional information please visit: [[02 Ports & Protocols]]. The most common protocols and ports are very important to memorize.
+### Email Protocols
+
+- **SMTP (Simple Mail Transfer Protocol)**: Sends messages, uses port 25.
+- **POP3 (Post Office Protocol v3)**: Downloads messages, uses port 110.
+- **IMAP4 (Internet Message Access Protocol v4)**: Stores messages on servers, uses port 143.
+
+### Messaging and VoIP
+
+- **Instant Messaging**: Real-time communication using text messages.
+- **VoIP (Voice over IP)**: Converts voice into digital data encapsulated in IP packets.
+
+### Useful Networking Commands
+
+- **ipconfig**: Displays a host’s IP configuration.
+- **ping**: Tests connectivity to another host.
+- **netstat**: Shows active connections.
+- **tracert**: Displays the route to a destination.
+- **nslookup**: Queries DNS for a domain’s IP address.
