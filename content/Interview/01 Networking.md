@@ -103,71 +103,6 @@ Wireless LANs use IEEE 802.11 standards in 2.4 GHz and 5 GHz frequency bands. Im
 - **SSID:** Identifies the network  
 - **Channel:** Specifies communication frequency  
 - **Network Mode:** Defines the wireless standard in use  
-
-## Sanity Check 1
-**Question 1**  
-> [!question]- **What is the order of bandwidth measurement from smallest to largest?**  
-> Kbps, Mbps, Gbps, Tbps  
-
-**Question 2**  
->[!question]- **What data representation is used when a computer processes data?**  
-> Binary  
-
-**Question 3**  
-> [!question]- **Which is a characteristic of the internet?**  
-> It is not centrally governed.  
-
-**Question 4**  
-> [!question]- **Which items are collectively referred to as network media?**  
-> PCs and laptops  
-
-**Question 5**  
->[!question]- **How many unique values are possible using a single binary digit?**  
-> 2  
-
-**Question 6**  
->[!question]- **Match the devices to categories:**  
-> PC (end device), printer (end device), router (intermediate), switch (intermediate)  
-
-**Question 7**  
->[!question]- **What are three intermediate devices?**  
-> Router, switch, wireless access point  
-
-**Question 8**  
->[!question]- **Name two wired internet connection types:**  
-> Cable, DSL  
-
-**Question 9**  
->[!question]- **Two methods mobile devices use for internet:**  
-> Wi-Fi, cellular  
-
-**Question 10**  
->[!question]- **What tech allows proximity payments?**  
-> NFC  
-
-**Question 11**  
->[!question]- **Which tech is used for wireless headphones?**  
-> Bluetooth  
-
-**Question 12**  
->[!question]- **What info may be requested during Bluetooth pairing?**  
-> A PIN  
-
-**Question 13**  
->[!question]- **Which frequency band is used by 802.11b/g?**  
-> 2.4 GHz  
-
-**Question 14**  
->[!question]- **Which bands are used in home WLANs?**  
-> 2.4 GHz, 5 GHz  
-
-**Question 15**  
->[!question]- **What uniquely identifies a WLAN?**  
-> SSID  
-
-**Question 16**  
->[!question]- **What is a characteristic of MAC filtering?**  
-> Restricts access by MAC address  
 ## Communication Protocols
 
 Communication protocols are essential rules and standards that enable computers to communicate effectively over networks. Key elements include message format, size, timing, encoding, encapsulation, and patterns.
@@ -251,65 +186,6 @@ Ethernet frames contain:
 Switches, which have replaced hubs, use MAC tables to direct traffic. A switch dynamically learns MAC addresses by examining source data in frames. A MAC address table stores mappings of each MAC address to the switch port it is connected to. When a switch receives a frame, it checks its MAC table to determine the correct port for forwarding the frame, ensuring efficient and accurate data delivery. If the destination MAC address is unknown, the switch broadcasts the frame to all ports except the one it was received on, awaiting a reply to update its table. Switches also eliminate collisions through full-duplex communication, allowing simultaneous data transmission and reception on a single link. Advanced switches may support VLANs and other features to segment networks and enhance security.
 
 ![[Pasted image 20250106191132.png]]
-
-## Sanity Check 2
-
-**Question 1**
-> [!question]- Match the protocol function to the description while taking into consideration that a network client is visiting a web site: 1. application protocol, 2. transport protocol, 3. internet protocol, 4. network access protocol
-> 1. Governing the way a web server and a web client interact
-> 2. managing the individual conversations between web servers and web clients
-> 3. taking the segments from transport protocol, encapsulating them into packets, and assigning them with appropriate addresses
-> 4. preparing packets to be transmitted over the network media
-> 
-
-**Question 2**
-> [!question]- Which three layers of the OSI model map to the application layer of the TCP/IP model?  
-> Application, Presentation, Session
-
-**Question 3**
-> [!question]- Which two OSI model layers have the same functionality as two layers of the TCP/IP model?
-> Transport, Network
-
-**Question 4**
-> [!question]- Match the TCP/IP model layer to the function: Application, Transport, Internet, Network access
-> 1. determines the best path to forward data through the network.
-> 2. controls hardware devices and media that make up the network.
-> 3. represents data to the user, data encoding, and dialog control.
-> 4. supports communication between diverse devices across networks.
-
-**Question 5**
-> [!question]- Which statement defines a data communications protocol? 
-> a set of rules that govern the communication process
-
-**Question 6**
-> [!question]- Which data encoding technology is used in fiber-optic cables?
-> pulses of light
-
-**Question 7**
-> [!question]- Which type of network cable is commonly used in backbone networks and telephone companies?
-> fiber-optic cable
-
-**Question 8**
-> [!question]- What is one advantage of using fiber optic cabling rather than copper cabling?
-> It is able to carry signals much farther than copper cabling.
-
-**Question 9**
-> [!question]- Which two applications are suitable for deploying coaxial cables?
-> 1. to connect a TV set to the wall plug at home
-> 2. to connect various components in a satellite communication system
-
-**Question 10**
-> [!question]- Which type of address does a switch use to build the MAC address table?
-> source MAC address
-
-**Question 11**
-> [!question]- Which term refers to the process of placing one message format inside another message format?
-> encapsulation
-
-**Question 12**
-> [!question]- How much data can be encapsulated into a normal sized Ethernet frame before it is sent over the network?
-> 46 to 1500 bytes
-
 ## IPv4
 IPv4 addressing is a system that assigns unique, logical network addresses to devices for communication within a LAN or across the internet. Each IPv4 address is tied to a network interface, typically via a Network Interface Card (NIC). Packets traveling over networks contain source and destination IPv4 addresses, guiding routers and switches in delivering the data correctly.
 
@@ -482,3 +358,7 @@ For additional information please visit: [[02 Ports & Protocols]]. The most comm
 - **netstat**: Shows active connections.
 - **tracert**: Displays the route to a destination.
 - **nslookup**: Queries DNS for a domain’s IP address.
+
+# Conclusion
+
+These topics cover the foundational networking concepts essential for a cybersecurity position. A solid understanding of network splitting, routing, TCP/UDP protocols, ports, and key internet services provides a strong basis for identifying and mitigating security risks. To reinforce your knowledge and explore practical applications, refer to the [[03 Networking Questions]] section.
