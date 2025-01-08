@@ -374,3 +374,329 @@ LDAP (Lightweight Directory Access Protocol) is used to query and manage objects
     
     - LDAP sends messages in cleartext by default.
     - To secure LDAP, use **LDAP over TLS (LDAPS)**, which encrypts communication to prevent credential sniffing.
+
+### Local Accounts
+
+**Definition:** Local accounts are user accounts that reside locally on a specific server or workstation. Rights assigned to these accounts are limited to the host machine and do not extend across a domain.
+
+**Example:** Default local accounts on a Windows system include:
+
+- `Administrator`: The first account created during Windows installation with full control over most system resources.
+    
+- `Guest`: A limited-access account disabled by default.
+    
+- `SYSTEM`: A service account with the highest permission level for internal functions.
+    
+- `Network Service` and `Local Service`: Predefined local accounts for running Windows services.
+    
+
+**Interview Tip:** Be ready to explain how local accounts differ from domain accounts and why disabling or managing default accounts (like Guest or Administrator) is crucial for security.
+
+---
+
+### Domain Users
+
+**Definition:** Domain users are accounts managed by a domain controller, granting rights across resources within the domain, such as file servers and printers.
+
+**Example:** The `KRBTGT` account, a service account for the Key Distribution service, is a common target for attackers due to its role in authenticating domain resources.
+
+**Interview Tip:** Understand attacks like "Golden Ticket" and why securing the `KRBTGT` account is vital in mitigating privilege escalation.
+
+---
+
+### Domain-Joined vs. Non-Domain-Joined Machines
+
+**Definition:**
+
+- **Domain-joined**: Machines linked to a domain with centralized management via domain controllers.
+    
+- **Non-domain-joined**: Machines managed individually or in a workgroup without centralized policies.
+    
+
+**Example:** A domain-joined host applies Group Policies from the domain, while a non-domain-joined computer relies on local policies.
+
+**Interview Tip:** Highlight the benefits of domain-joined environments, such as policy enforcement and easier user management, and understand security implications of workgroup setups.
+
+---
+
+### Groups
+
+**Definition:** Groups simplify permissions management by grouping users together and assigning rights to the group instead of individual users.
+
+- **Security Groups**: Assign permissions to resources.
+    
+- **Distribution Groups**: Used by email systems for message distribution.
+    
+
+**Example:** A "Domain Admins" security group grants administrative privileges across the domain.
+
+**Interview Tip:** Explain how groups reduce management overhead and why nesting groups can introduce privilege escalation risks.
+
+---
+
+### Group Scopes
+
+**Definition:** Group scopes define the boundaries where a group can be used.
+
+**Examples:**
+
+- **Domain Local Group**: Manages permissions in its own domain but can include users from other domains.
+    
+- **Global Group**: Contains users from its own domain and can be used across domains.
+    
+- **Universal Group**: Manages permissions across domains within a forest.
+    
+
+**Interview Tip:** Understand the implications of replication when managing universal groups and best practices for minimizing network overhead.
+
+---
+
+### Built-in vs. Custom Groups
+
+**Definition:**
+
+- **Built-in Groups**: Predefined security groups with specific administrative roles.
+    
+- **Custom Groups**: Created by administrators to meet organizational needs.
+    
+
+**Example:** The "Domain Admins" built-in group has global scope and administrative privileges.
+
+**Interview Tip:** Describe scenarios where custom groups are preferred for more granular access control.
+
+---
+
+### Nested Group Membership
+
+**Definition:** Nested groups allow a group to be a member of another group, inheriting permissions.
+
+**Example:** A "Help Desk" group nested within a "Tier 1 Admins" group grants all privileges assigned to "Tier 1 Admins" to "Help Desk" members.
+
+**Interview Tip:** Discuss how tools like BloodHound can visualize nested group memberships to identify privilege escalation paths.
+
+---
+
+# Security in Active Directory (AD)
+
+**Definition:** AD is designed for centralized management, making it inherently susceptible to security risks without proper hardening.
+
+#### CIA Triad
+![[Pasted image 20250108105245.png]]
+Source: https://www.f5.com/labs/learning-center/what-is-the-cia-triad
+
+**Example:** The balance between Confidentiality, Integrity, and Availability is foundational to cybersecurity.
+
+**Interview Tip:** Be ready to explain why AD emphasizes availability and how to strengthen confidentiality and integrity.
+
+---
+
+### General AD Hardening Measures
+
+#### LAPS
+
+**Definition:** Microsoft Local Administrator Password Solution (LAPS) randomizes and rotates local administrator passwords.
+
+**Example:** LAPS reduces the risk of lateral movement by managing unique local admin passwords.
+
+**Interview Tip:** Describe how LAPS mitigates lateral movement and complements broader defense-in-depth strategies.
+
+---
+
+#### Audit Policy Settings
+
+**Definition:** Audit policies enable logging and monitoring of AD changes.
+
+**Example:** Monitoring account lockouts or password changes can help detect unauthorized access.
+
+**Interview Tip:** Highlight the importance of continuous monitoring for proactive threat detection.
+
+---
+
+#### Group Policy Security Settings
+
+**Definition:** Group Policies apply configurations and security settings to users and computers.
+
+**Example:** Applying account policies to enforce password complexity and lockout thresholds.
+
+**Interview Tip:** Explain how Group Policies can enforce security standards consistently across an organization.
+
+---
+
+#### Update Management
+
+**Definition:** Systems like WSUS and SCCM automate patch management.
+
+**Example:** SCCM offers advanced deployment features for timely Windows updates.
+
+**Interview Tip:** Discuss the risks of manual patching and how automated solutions minimize vulnerabilities.
+
+---
+
+#### Group Managed Service Accounts (gMSA)
+
+**Definition:** gMSAs provide secure, automatically managed service account credentials.
+
+**Example:** gMSAs eliminate the need for manual password management by auto-rotating passwords.
+
+**Interview Tip:** Explain the benefits of using gMSAs for security and administrative simplicity.
+
+---
+
+#### Security Groups
+
+**Definition:** Security groups manage access control and permissions.
+
+**Example:** The "Domain Admins" group is highly privileged.
+
+**Interview Tip:** Discuss how security groups streamline permission management and how misuse can lead to privilege escalation.
+
+---
+
+#### Account Separation
+
+**Definition:** Using separate accounts for daily tasks and administrative duties.
+
+**Example:** `user_account` for general use and `admin_account` for elevated tasks.
+
+**Interview Tip:** Explain how account separation reduces risk in case of compromised credentials.
+
+---
+
+#### Password Complexity Policies + 2FA
+
+**Definition:** Enforcing strong passwords and multi-factor authentication (MFA) to enhance security.
+
+**Example:** Using 16-character passphrases and requiring MFA for Remote Desktop.
+
+**Interview Tip:** Understand password spraying and how MFA mitigates unauthorized access.
+
+---
+
+#### Limiting Domain Admin Usage
+
+**Definition:** Restricting Domain Admin accounts to domain controllers only.
+
+**Example:** Preventing login to personal workstations with Domain Admin credentials.
+
+**Interview Tip:** Demonstrate awareness of how limiting admin account usage reduces attack surfaces.
+
+---
+
+#### Auditing and Removing Stale Objects
+
+**Definition:** Periodic review and cleanup of inactive user accounts and groups.
+
+**Example:** Disabling accounts for former employees to prevent unauthorized access.
+
+**Interview Tip:** Explain how regular audits maintain a secure and well-managed AD environment.
+
+#### Auditing Permissions and Access
+
+**Definition:** Periodic audits to ensure users have appropriate access levels.
+
+**Example:** Reviewing local admin rights and limiting Domain Admins.
+
+**Interview Tip:** Discuss how auditing minimizes the attack surface by reducing unnecessary privileges.
+
+---
+
+#### Audit Policies & Logging
+
+**Definition:** Implementing robust logging for detecting anomalous activity.
+
+**Example:** Monitoring for failed logins to detect password spraying attempts.
+
+**Interview Tip:** Reference Microsoft's Audit Policy Recommendations for detecting compromises.
+
+---
+
+#### Using Restricted Groups
+
+**Definition:** Controlling group membership via Group Policy.
+
+**Example:** Limiting local admin groups to specified accounts only.
+
+**Interview Tip:** Explain how restricted groups prevent unauthorized privilege escalation.
+
+---
+
+#### Limiting Server Roles
+
+**Definition:** Minimizing unnecessary roles on sensitive servers.
+
+**Example:** Avoiding IIS installation on Domain Controllers.
+
+**Interview Tip:** Discuss how role separation reduces attack surfaces.
+
+---
+
+#### Limiting Local Admin and RDP Rights
+
+**Definition:** Restricting local admin and Remote Desktop rights.
+
+**Example:** Using Restricted Groups to limit RDP access to necessary users.
+
+**Interview Tip:** Explain how reducing admin rights lowers the risk of lateral movement and privilege escalation.
+
+---
+
+This [link](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/best-practices-for-securing-active-directory) provides further reading on Microsoft's Best Practices for Securing Active Directory.
+
+## Examining Group Policy
+
+**Definition:** Group Policy is a Windows feature that provides administrators with advanced settings for user and computer accounts in a domain. It is a critical tool for applying security configurations and improving a domain's defense-in-depth strategy.
+
+**Example:** Applying policies such as enforcing password complexity, disabling USB ports, or deploying software across multiple hosts.
+
+**Interview Tip:** Be ready to explain how attackers can abuse GPOs for privilege escalation and persistence, emphasizing the need for securing GPO management.
+
+---
+
+#### Group Policy Objects (GPOs)
+
+**Definition:** GPOs are collections of settings that manage configurations and security for users or computers in a domain.
+
+**Example:** Configuring screen lock timeout, deploying software, or disabling removable media usage.
+
+**Interview Tip:** Understand GPO linking to OUs, domains, and sites and explain how precedence rules determine which settings apply.
+
+---
+
+#### Example GPOs
+
+**Examples:**
+
+- Different password policies for service and admin accounts.
+    
+- Restricting access to PowerShell or cmd.exe.
+    
+- Enforcing a login banner.
+    
+- Blocking removable media.
+    
+
+**Interview Tip:** Familiarize yourself with granular GPO settings and how they enhance security posture.
+
+---
+
+#### Order of Precedence
+
+**Definition:** Defines how GPOs are processed in AD hierarchy.
+
+**Example:** OU-linked GPOs override domain-level GPOs.
+
+**Interview Tip:** Explain how GPO order affects policy application and how conflicts are resolved.
+![[Pasted image 20250108110526.png]]
+Source: https://emeneye.wordpress.com/2016/02/16/group-policy-order-of-precedence-faq/
+
+---
+
+#### Security Considerations of GPOs
+
+**Definition:** GPOs can be exploited to modify permissions, add admin users, or create scheduled tasks for persistence.
+
+**Example:** Using BloodHound to identify GPOs that allow modifying admin rights for lateral movement.
+
+**Interview Tip:** Demonstrate knowledge of securing GPOs by restricting access and auditing changes.
+
+This [link](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/best-practices-for-securing-active-directory) provides further reading on Microsoft's Best Practices for Securing Active Directory.
