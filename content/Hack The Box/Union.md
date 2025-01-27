@@ -1,3 +1,7 @@
+---
+title: Union
+description: This is a classic beginner box that I highly recommend for sharpening your knowledge of SQL Injection (SQLi) and Linux Local Privilege Escalation (LPE).
+---
 ![[Pasted image 20250127102228.png]]
 # Motivation
 This is a classic beginner box that I highly recommend for sharpening your knowledge of SQL Injection (SQLi) and Linux Local Privilege Escalation (LPE). These are essential techniques, and if you're planning to take the OSCP, you’ll need to practice them extensively, as they will certainly be tested in that certification.
