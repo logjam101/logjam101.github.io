@@ -19,6 +19,7 @@ const config: QuartzConfig = {
     baseUrl: "logjam101.github.io",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "created",
+    generateSocialImages: true,
     generateSocialImages: {
       colorScheme: "lightMode",
       width: 1200,
