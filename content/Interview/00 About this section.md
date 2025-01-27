@@ -13,11 +13,11 @@ Unlike comprehensive guides or tutorials, these modules assume you already have 
 
 If you're preparing for a cybersecurity interview, a structured review of key topics can be helpful. Here’s the recommended path:
 
-1. **Networking Basics**  [[01 Networking]]
+1. **Networking Basics**  [[00 Networking]]
     Start by revisiting the **Networking** page. It's essential to have a strong understanding of foundational networking concepts like IP addressing, subnets, VLANs, and routing. This section will help you understand the core infrastructure on which most security concepts rely.
 	
     
-2. **Common Ports and Protocols** [[02 Ports & Protocols]] 
+2. **Common Ports and Protocols** [[01 Ports & Protocols]] 
     After refreshing your networking knowledge, head over to the section that covers the **most common ports and protocols**. This topic is frequently tested in interviews, as understanding which ports are associated with which services (HTTP, FTP, DNS, etc.) is crucial for both blue and red team roles.
 3. **Active Directory Basics** [[00 Active Directory Basics]]
 	The next important topic to dive into is **Active Directory (AD)**. AD is a directory service used by Microsoft to manage permissions and access to network resources. Understanding its role in cybersecurity is essential, as many attacks focus on compromising AD to escalate privileges or gain access to sensitive data
