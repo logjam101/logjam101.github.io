@@ -20,3 +20,4 @@ I’m always happy to connect with fellow cybersecurity enthusiasts, researchers
 ---
 
 Looking forward to hearing from you! If you spot errors or have ideas to improve this site, don’t hesitate to reach out.
+Update check!
